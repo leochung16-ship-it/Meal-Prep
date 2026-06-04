@@ -1,0 +1,1 @@
+let customRecipes=[];function addRecipe(){alert("Recipe added")};function generateMeals(){document.getElementById("output").innerHTML="Meals generated"}
