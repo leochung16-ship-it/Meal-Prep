@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,17 +7,38 @@
 <title>Meal Prep Planner</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<h1>Meal Prep Planner</h1>
+
+<h1>🍽 Meal Prep Planner</h1>
+
 <div class="container">
-<textarea id="ingredients"></textarea>
-<input id="recipeName">
-<input id="recipeIngredients">
-<select id="cookingType"><option value="oven">Oven</option><option value="induction">Induction</option></select>
-<button onclick="addRecipe()">Add</button>
-<button onclick="generateMeals()">Generate</button>
-<div id="output"></div>
+
+    <h2>Add Ingredients</h2>
+    <textarea id="ingredients" placeholder="chicken, rice, broccoli"></textarea>
+
+    <h2>Add Recipe</h2>
+    <input id="recipeName" placeholder="Recipe name">
+    <input id="recipeIngredients" placeholder="Ingredients (comma separated)">
+    <select id="cookingType">
+        <option value="oven">Oven</option>
+        <option value="induction">Induction</option>
+    </select>
+    <button onclick="addRecipe()">Add Recipe</button>
+
+    <hr>
+
+    <button class="main-btn" onclick="generateChoices()">
+        🔥 Create Meal Prep
+    </button>
+
+    <div id="choices"></div>
+    <div id="final"></div>
+
 </div>
+
 <script src="script.js"></script>
+
 </body>
 </html>
+``
