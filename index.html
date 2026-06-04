@@ -7,38 +7,53 @@
 <title>Meal Prep Planner</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <h1>🍽 Meal Prep Planner</h1>
 
-<div class="container">
+<div class="app">
 
-    <h2>Add Ingredients</h2>
-    <textarea id="ingredients" placeholder="chicken, rice, broccoli"></textarea>
+    <!-- INGREDIENTS -->
+    <div class="card">
+        <h2>Add Ingredient</h2>
+        <input id="ingredientInput" placeholder="e.g chicken">
+        <button onclick="addIngredient()">Add</button>
 
-    <h2>Add Recipe</h2>
-    <input id="recipeName" placeholder="Recipe name">
-    <input id="recipeIngredients" placeholder="Ingredients (comma separated)">
-    <select id="cookingType">
-        <option value="oven">Oven</option>
-        <option value="induction">Induction</option>
-    </select>
-    <button onclick="addRecipe()">Add Recipe</button>
+        <h3>Ingredients</h3>
+        <ul id="ingredientList"></ul>
+    </div>
 
-    <hr>
+    <!-- RECIPES -->
+    <div class="card">
+        <h2>Add Recipe</h2>
+        <input id="recipeName" placeholder="Recipe name">
+        <input id="recipeIngredients" placeholder="chicken, rice">
 
-    <button class="main-btn" onclick="generateChoices()">
-        🔥 Create Meal Prep
-    </button>
+        <select id="cookingType">
+            <option value="oven">Oven</option>
+            <option value="induction">Induction</option>
+        </select>
 
-    <div id="choices"></div>
-    <div id="final"></div>
+        <button onclick="addRecipe()">Add Recipe</button>
+
+        <h3>Recipes</h3>
+        <ul id="recipeList"></ul>
+    </div>
 
 </div>
+
+<!-- CENTER BUTTON -->
+<div class="center">
+    <button class="main-btn" onclick="generateMealPrep()">
+        Create Meal Prep
+    </button>
+</div>
+
+<!-- RESULT -->
+<div id="mealChoices" class="choices"></div>
+<div id="actions" class="actions"></div>
 
 <script src="script.js"></script>
 
 </body>
 </html>
-``
