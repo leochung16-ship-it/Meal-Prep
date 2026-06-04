@@ -1,59 +1,59 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meal Prep Planner</title>
-<link rel="stylesheet" href="style.css">
+<!DOCTYPE html><!DOCTYPE    <title>Meal Prep Planner</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>🍽 Meal Prep Planner</h1>
+<h1>Meal Prep Planner</h1>
 
-<div class="app">
+<!-- TOP SECTION -->
+<div class="container">
 
-    <!-- INGREDIENTS -->
-    <div class="card">
-        <h2>Add Ingredient</h2>
-        <input id="ingredientInput" placeholder="e.g chicken">
-        <button onclick="addIngredient()">Add</button>
+    <h2>Add Ingredient</h2>
+    <input id="ingredientName" placeholder="Ingredient">
 
-        <h3>Ingredients</h3>
-        <ul id="ingredientList"></ul>
-    </div>
+    <select id="ingredientCategory">
+        <option>Meat</option>
+        <option>Fish</option>
+        <option>Veggies</option>
+        <option>Fruits</option>
+        <option>Dairy</option>
+        <option>N/A</option>
+    </select>
 
-    <!-- RECIPES -->
-    <div class="card">
-        <h2>Add Recipe</h2>
-        <input id="recipeName" placeholder="Recipe name">
-        <input id="recipeIngredients" placeholder="chicken, rice">
+    <select id="ingredientMacro">
+        <option>Protein</option>
+        <option>Carbs</option>
+        <option>Fiber</option>
+        <option>N/A</option>
+    </select>
 
-        <select id="cookingType">
-            <option value="oven">Oven</option>
-            <option value="induction">Induction</option>
-        </select>
+    <button onclick="addIngredient()">Add Ingredient</button>
 
-        <button onclick="addRecipe()">Add Recipe</button>
+    <h2>Add Recipe</h2>
+    <input id="recipeName" placeholder="Recipe name">
+    <input id="recipeIngredients" placeholder="Ingredients (comma separated)">
+    
+    <select id="recipeType">
+        <option value="oven">Oven</option>
+        <option value="induction">Induction</option>
+    </select>
 
-        <h3>Recipes</h3>
-        <ul id="recipeList"></ul>
-    </div>
+    <button onclick="addRecipe()">Add Recipe</button>
 
 </div>
 
-<!-- CENTER BUTTON -->
-<div class="center">
-    <button class="main-btn" onclick="generateMealPrep()">
-        Create Meal Prep
-    </button>
+<!-- GENERATION SECTION -->
+<div class="container">
+    <button onclick="generateMealPrep()">🍽 Create Meal Prep</button>
+    <div id="output"></div>
 </div>
-
-<!-- RESULT -->
-<div id="mealChoices" class="choices"></div>
-<div id="actions" class="actions"></div>
 
 <script src="script.js"></script>
 
 </body>
 </html>
+
+<html>
+<head>
