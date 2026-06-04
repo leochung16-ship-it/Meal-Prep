@@ -1,92 +1,147 @@
 
-// Load stored data
-let recipes = JSON.parse(localStorage.getItem("recipes")) || [];
-let lastWeek = localStorage.getItem("lastWeek") || "";
+let ingredients = [];
+let recipes = [];
+let lastWeekChoices = [];
 
-// Add recipe
+// ✅ INGREDIENTS
+function addIngredient() {
+    const input = document.getElementById("ingredientInput").value.trim();
+    if (!input) return;
+
+    ingredients.push(input);
+    document.getElementById("ingredientInput").value = "";
+    renderIngredients();
+}
+
+function renderIngredients() {
+    const list = document.getElementById("ingredientList");
+    list.innerHTML = "";
+
+    ingredients.forEach((ing, i) => {
+        list.innerHTML += `
+            <li>
+                ${ing}
+                <span class="delete" onclick="deleteIngredient(${i})">❌</span>
+            </li>
+        `;
+    });
+}
+
+function deleteIngredient(i) {
+    ingredients.splice(i, 1);
+    renderIngredients();
+}
+
+// ✅ RECIPES
 function addRecipe() {
     const name = document.getElementById("recipeName").value;
-    const ingredients = document.getElementById("recipeIngredients")
-        .value.toLowerCase().split(",").map(i => i.trim());
+    const ing = document.getElementById("recipeIngredients").value
+        .toLowerCase().split(",").map(i => i.trim());
     const type = document.getElementById("cookingType").value;
 
-    if (!name) return alert("Enter recipe name");
+    if (!name) return;
 
-    recipes.push({ name, ingredients, type });
-    localStorage.setItem("recipes", JSON.stringify(recipes));
+    recipes.push({ name, ingredients: ing, type });
 
-    alert("✅ Recipe added");
+    document.getElementById("recipeName").value = "";
+    document.getElementById("recipeIngredients").value = "";
+
+    renderRecipes();
 }
 
-// Generate meal prep choices
-function generateChoices() {
-    const ingredients = document.getElementById("ingredients")
-        .value.toLowerCase().split(",").map(i => i.trim());
+function renderRecipes() {
+    const list = document.getElementById("recipeList");
+    list.innerHTML = "";
 
-    let pool = [...recipes];
+    recipes.forEach((r, i) => {
+        list.innerHTML += `
+            <li>
+                ${r.name}
+                <span class="delete" onclick="deleteRecipe(${i})">❌</span>
+            </li>
+        `;
+    });
+}
 
-    // Remove last week's chosen recipe
-    pool = pool.filter(r => r.name !== lastWeek);
+function deleteRecipe(i) {
+    recipes.splice(i, 1);
+    renderRecipes();
+}
 
-    let choices = [];
+// ✅ MEAL GENERATION
+function generateMealPrep() {
+    let pool = [];
 
-    // 1. Pick existing recipes
-    while (choices.length < 2 && pool.length > 0) {
-        const randomIndex = Math.floor(Math.random() * pool.length);
-        choices.push(pool[randomIndex]);
-        pool.splice(randomIndex, 1);
+    // 1. recipes from memory (excluding last week)
+    const available = recipes.filter(r =>
+        !lastWeekChoices.includes(r.name)
+    );
+
+    pool = [...available];
+
+    // 2. generated ideas
+    while (pool.length < 4 && ingredients.length > 0) {
+        pool.push(createIdea());
     }
 
-    // 2. Generate ideas from ingredients
-    while (choices.length < 4) {
-        choices.push(generateIdea(ingredients));
-    }
+    pool = shuffle(pool).slice(0, 4);
 
-    displayChoices(choices);
+    showChoices(pool);
 }
 
-// Generate simple idea
-function generateIdea(ingredients) {
-    const type = Math.random() > 0.5 ? "oven" : "induction";
+function showChoices(choices) {
+    const container = document.getElementById("mealChoices");
+    const actions = document.getElementById("actions");
 
-    const base = ingredients.slice(0, 3).join(" & ");
+    container.innerHTML = "<h2>Choose your meal prep</h2>";
 
-    return {
-        name: type === "oven"
-            ? "Oven baked " + base
-            : "Pan cooked " + base,
-        type
-    };
-}
-
-// Display choices
-function displayChoices(choices) {
-    let html = "<h3>Choose your meal prep</h3>";
-
-    choices.forEach(choice => {
-        html += `
-            <div class="card">
-                <strong>${choice.name}</strong> (${choice.type})<br>
-                <button onclick="acceptChoice('${choice.name}')">✅ Accept</button>
+    choices.forEach((c, i) => {
+        container.innerHTML += `
+            <div class="choice" onclick="selectChoice(${i})">
+                <strong>${c.name}</strong><br>
+                (${c.type})
             </div>
         `;
     });
 
-    html += `<button onclick="generateChoices()">🔄 Reroll</button>`;
+    window.currentChoices = choices;
 
-    document.getElementById("choices").innerHTML = html;
-    document.getElementById("final").innerHTML = "";
+    actions.innerHTML = `
+        <button onclick="generateMealPrep()">🔄 Regenerate</button>
+    `;
 }
 
-// Accept selection
-function acceptChoice(name) {
-    lastWeek = name;
-    localStorage.setItem("lastWeek", name);
+function selectChoice(i) {
+    const selected = window.currentChoices[i];
 
-    document.getElementById("final").innerHTML = `
-        <h3>✅ Selected for this week:</h3>
-        <p><strong>${name}</strong></p>
+    lastWeekChoices = [selected.name];
+
+    document.getElementById("mealChoices").innerHTML = `
+        <h2>✅ Selected</h2>
+        <p>${selected.name} (${selected.type})</p>
     `;
 
-    document.getElementById("choices").innerHTML = "";
+    document.getElementById("actions").innerHTML = `
+        <button onclick="generateMealPrep()">New Plan</button>
+    `;
+}
+
+// ✅ IDEA CREATION
+function createIdea() {
+    const type = Math.random() > 0.5 ? "oven" : "induction";
+
+    const ing = shuffle(ingredients).slice(0, 3);
+
+    return {
+        name: type === "oven"
+            ? "Oven baked " + ing.join(", ")
+            : "Pan mix " + ing.join(", "),
+        ingredients: ing,
+        type
+    };
+}
+
+// ✅ helper
+function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
 }
